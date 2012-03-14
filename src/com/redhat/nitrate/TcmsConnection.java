@@ -21,8 +21,7 @@ public class TcmsConnection {
     private XmlRpcClient client;
     private String session;
     public TcmsConnection(String server_url) throws MalformedURLException {
-          client = new XmlRpcClient(server_url,false);
-           
+          client = new XmlRpcClient(server_url,false);     
     }
 
     public void setSession(String session) {
@@ -30,42 +29,6 @@ public class TcmsConnection {
         this.session = session;
     }
     
-    /*public String Auth_login(String username,String password) throws XmlRpcFault{
-        Hashtable<String,Object> data =new Hashtable<String,Object>();
-        data.put("username", username);
-        data.put("password", password);
-        Vector params = new Vector();
-        params.add(data);
-        String session = (String) client.invoke("Auth.login", params);
-   
-        Map m = client.getResponseHeaderFields();
-        return session;
-    }
-     public void Auth_logout() throws XmlRpcFault{
-        Integer result;
-        ArrayList l = new ArrayList();
-        client.invoke("Auth.logout",l);
-        client.setRequestProperty("Cookie", "");
-    }
-    public Object Plan_create(Integer product,String name,Integer type,Integer default_product_version,String text,Integer parent,Boolean is_active) throws XmlRpcFault{
-        Hashtable<String,Object> data =new Hashtable<String,Object>();
-        data.put("product", product);
-        data.put("name", name);
-        data.put("type", type);
-        data.put("default_product_version", default_product_version);
-        data.put("text", text);
-        if(parent!=null){
-            data.put("parent", parent);
-        }
-        if(is_active!=null){
-            data.put("is_active", is_active);
-        }
-
-        Vector params = new Vector();
-        params.add(data);
-        Object o= client.invoke("TestPlan.create", params);
-        return o;
-    }*/
     public Object invoke(TcmsCommand cmd) throws XmlRpcFault{
         Hashtable<String,Object> data =new Hashtable<String,Object>();
         
@@ -74,6 +37,20 @@ public class TcmsConnection {
         if(fields.length==0){
             Object o= client.invoke(cmd.name(), new ArrayList());
             return o;
+        }
+
+        if(fields.length==1){
+            try {
+                ArrayList l = new ArrayList();
+                l.add(fields[0].get(cmd));
+                Object o = client.invoke(cmd.name(), l);
+                return o;
+            } catch (IllegalArgumentException ex) {
+                Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         }
 
         for (Field field : fields) {
