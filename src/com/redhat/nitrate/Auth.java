@@ -13,12 +13,14 @@ import redstone.xmlrpc.XmlRpcFault;
  * @author asaleh
  */
 public class Auth {
-    public static class login extends TcmsCommand{
+    public static class login extends TcmsHashCommand{
         @RequiredField
         public String username;
         @RequiredField
         public String password;
 
+        public login(){
+        }
         public login(String username, String password) {
             this.username = username;
             this.password = password;
@@ -27,7 +29,7 @@ public class Auth {
             return (String) c.invoke(this);
         }
     }
-    public static class login_krbv extends TcmsCommand{}
-    public static class logout extends TcmsCommand{}
+    public static class login_krbv extends TcmsArrayCommand{}
+    public static class logout extends TcmsArrayCommand{}
 
 }
