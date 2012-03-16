@@ -6,7 +6,9 @@ package com.redhat.nitrate;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -29,48 +31,63 @@ public class TcmsConnection {
         this.session = session;
     }
     
-    public Object invoke(TcmsCommand cmd) throws XmlRpcFault{
-        Hashtable<String,Object> data =new Hashtable<String,Object>();
+    static Hashtable<String,Object> fieldsToHashtable(Object object) throws IllegalAccessException{
+         Hashtable<String,Object> data =new Hashtable<String,Object>();
         
-        Field[] fields =  cmd.getClass().getFields();
+        Field[] fields =  object.getClass().getFields();
+         for (Field field : fields) {
+           String name = field.getName();
+           Object value = field.get(object);
+           if(value!=null){
+               data.put(name, value);
+           }
+        }
+        return data;
+    }
 
-        if(fields.length==0){
-            Object o= client.invoke(cmd.name(), new ArrayList());
+    static List<Object> fieldsToCollection(Object object) throws IllegalAccessException{
+        ArrayList data = new ArrayList();
+        
+        Field[] fields =  object.getClass().getFields();
+         for (Field field : fields) {
+           String name = field.getName();
+           Object value = field.get(object);
+           
+           if(TcmsArrayCommand.class.isInstance(value)){
+             value= fieldsToCollection(value);
+           }else if(TcmsHashCommand.class.isInstance(value)){
+             value = fieldsToHashtable(value);
+           }
+
+           if(value!=null){
+               data.add(value);
+           }
+        }
+        return data;
+    }
+
+    public static List commandToParams(TcmsCommand cmd) throws IllegalAccessException{
+          Field[] fields = cmd.getClass().getFields();
+          
+          if(TcmsArrayCommand.class.isInstance(cmd)){
+             return fieldsToCollection(cmd);
+          }else if(TcmsHashCommand.class.isInstance(cmd)){
+             Hashtable<String, Object> data = fieldsToHashtable(cmd);
+             Vector params = new Vector();
+             params.add(data);
+             return params;
+          }
+          return null;
+    }
+
+    public Object invoke(TcmsCommand cmd) throws XmlRpcFault{
+        try {
+            List params = commandToParams(cmd);
+            Object o = client.invoke(cmd.name(), params);
             return o;
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
-
-        if(fields.length==1){
-            try {
-                ArrayList l = new ArrayList();
-                l.add(fields[0].get(cmd));
-                Object o = client.invoke(cmd.name(), l);
-                return o;
-            } catch (IllegalArgumentException ex) {
-                Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
-
-        for (Field field : fields) {
-            try {
-                String name = field.getName();
-                Object value = field.get(cmd);
-                if(value!=null){
-                 data.put(name, value);
-                }
-            } catch (IllegalArgumentException ex) {
-                Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
-
-        Vector params = new Vector();
-        params.add(data);
-        Object o= client.invoke(cmd.name(), params);
-        return o;
     }
 }
