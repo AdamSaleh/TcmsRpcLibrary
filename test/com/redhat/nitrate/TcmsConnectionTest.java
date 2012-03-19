@@ -34,17 +34,17 @@ public class TcmsConnectionTest {
     /**
      * Test of Auth_login method, of class TcmsConnection.
      */
-    @Test
+    /*@Test
     public void testLogin() {
         try {
             TcmsConnection nitrate;
             nitrate = new TcmsConnection("http://localhost:8000/xmlrpc/");
-            Auth.login login = new Auth.login("asaleh", "");
+            Auth.login login = new Auth.login("asaleh", "*Cygnusolor*");
             String session = (String) nitrate.invoke(login);
 
             nitrate.setSession(session);
             
-            TestPlan.create create = new TestPlan.create();
+           TestPlan.create create = new TestPlan.create();
             create.product = new Integer(1);
             create.name = "Plan8";
             create.type=new Integer(1);
@@ -52,6 +52,11 @@ public class TcmsConnectionTest {
             create.text="texting";
             create.is_active = Boolean.TRUE;
             Object o= nitrate.invoke(create);
+           
+            
+            TestPlan.check_plan_type cmd = new TestPlan.check_plan_type();
+            cmd.name="Unit";
+            Object o= nitrate.invoke(cmd);
 
             nitrate.invoke(new Auth.logout());
         } catch (XmlRpcFault ex) {
@@ -61,6 +66,6 @@ public class TcmsConnectionTest {
         }
 
 
-    }
+    }*/
 
 }

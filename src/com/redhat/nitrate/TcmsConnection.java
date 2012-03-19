@@ -36,7 +36,7 @@ public class TcmsConnection {
         
         Field[] fields =  object.getClass().getFields();
          for (Field field : fields) {
-           String name = field.getName();
+           String name = getName(field);
            Object value = field.get(object);
            if(value!=null){
                data.put(name, value);
@@ -45,12 +45,19 @@ public class TcmsConnection {
         return data;
     }
 
+    static String getName(Field field){
+        String s = field.getName();
+        if(s.contains("caseVar")){
+            s="case";
+        }
+        return s;
+    }
     static List<Object> fieldsToCollection(Object object) throws IllegalAccessException{
         ArrayList data = new ArrayList();
         
         Field[] fields =  object.getClass().getFields();
          for (Field field : fields) {
-           String name = field.getName();
+           String name = getName(field);
            Object value = field.get(object);
            
            if(TcmsArrayCommand.class.isInstance(value)){

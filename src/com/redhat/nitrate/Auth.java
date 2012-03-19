@@ -31,5 +31,9 @@ public class Auth {
     }
     public static class login_krbv extends TcmsArrayCommand{}
     public static class logout extends TcmsArrayCommand{}
+    public static class get extends TcmsArrayCommand{
+        @RequiredField
+        public Integer id;
+    };
 
 }
