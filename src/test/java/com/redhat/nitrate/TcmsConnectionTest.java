@@ -34,6 +34,10 @@ public class TcmsConnectionTest {
     /**
      * Test of Auth_login method, of class TcmsConnection.
      */
+    @Test
+    public void testLogin() {
+        
+    }
     /*@Test
     public void testLogin() {
         try {

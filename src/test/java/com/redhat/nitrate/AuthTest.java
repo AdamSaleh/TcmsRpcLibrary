@@ -40,7 +40,7 @@ public class AuthTest {
         Hashtable<String,Object> table = (Hashtable<String,Object>) l.get(0);
         assertEquals(2,table.size());
 
-        assertEquals("user",table.get("product"));
+        assertEquals("user",table.get("username"));
         assertEquals("nbusr123",table.get("password"));
  
     }
