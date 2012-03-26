@@ -10,6 +10,15 @@ package com.redhat.nitrate;
  */
 public class TestCaseRun {
 
+    public static final int IDLE=1;
+    public static final int PASSED=2;
+    public static final int FAILED=3;
+    public static final int RUNNING=4;
+    public static final int PAUSED=5;
+    public static final int BLOCKED=6;
+    public static final int ERROR=7;
+    public static final int WAIVED=8;
+
     public static class add_comment extends TcmsArrayCommand {
 
         @RequiredField
@@ -36,17 +45,17 @@ public class TestCaseRun {
     public static class create extends TcmsHashCommand {
 
         @RequiredField
-        Integer run;
+        public Integer run;
         @RequiredField
-        Integer caseVar;
+        public Integer caseVar;
         @RequiredField
-        Integer build;
+        public Integer build;
         @RequiredField
-        String asignee;
-        Integer case_run_status;
-        Integer case_text_version;
-        String notes;
-        Integer sortkey;
+        public String asignee;
+        public Integer case_run_status;
+        public Integer case_text_version;
+        public String notes;
+        public Integer sortkey;
     }
 
     public static class detach_bug extends TcmsArrayCommand {

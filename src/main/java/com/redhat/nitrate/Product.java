@@ -31,6 +31,7 @@ public class Product {
 
         @RequiredField
         public Integer id;
+        public String id_str;
     };
 
     public static class get_builds extends Product.get {

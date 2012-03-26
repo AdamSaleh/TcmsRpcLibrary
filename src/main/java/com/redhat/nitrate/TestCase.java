@@ -9,6 +9,31 @@ package com.redhat.nitrate;
  * @author asaleh
  */
 public class TestCase {
+        public Integer case_id;
+        public Object create_date;
+        public Integer product;
+        public Integer category;
+        public Integer priority;
+        public String summary;
+        public Integer case_status;
+        public Integer plan;
+        public Integer component;
+        public String default_tester;
+        public String estimated_time;
+        public Integer is_automated;
+        public Boolean is_automated_proposed;
+        public Integer sortkey;
+        public String script;
+        public String arguments;
+        public String requirement;
+        public String alias;
+        public String action;
+        public String effect;
+        public String setup;
+        public String breakdown;
+        public Object tag;
+        public Object bug;
+    
 
     public static class add_comment extends TcmsArrayCommand {
 
@@ -78,31 +103,31 @@ public class TestCase {
     public static class create extends TcmsHashCommand {
 
         @RequiredField
-        Integer product;
+        public Integer product;
         @RequiredField
-        Integer category;
+        public Integer category;
         @RequiredField
-        Integer priority;
+        public Integer priority;
         @RequiredField
-        String summary;
-        Integer case_status;
-        Integer plan;
-        Integer component;
-        String default_tester;
-        String estimated_time;
-        Integer is_automated;
-        Boolean is_automated_proposed;
-        Integer sortkey;
-        String script;
-        String arguments;
-        String requirement;
-        String alias;
-        String action;
-        String effect;
-        String setup;
-        String breakdown;
-        String tag;
-        String bug;
+        public String summary;
+        public Integer case_status;
+        public Integer plan;
+        public Integer component;
+        public String default_tester;
+        public String estimated_time;
+        public Integer is_automated;
+        public Boolean is_automated_proposed;
+        public Integer sortkey;
+        public String script;
+        public String arguments;
+        public String requirement;
+        public String alias;
+        public String action;
+        public String effect;
+        public String setup;
+        public String breakdown;
+        public Object tag;
+        public Object bug;
     }
 
     public static class detach_bug extends TcmsArrayCommand {
@@ -113,8 +138,19 @@ public class TestCase {
 
     public static class get extends TcmsArrayCommand {
 
-        @RequiredField
-        public Integer case_id;
+        //@RequiredField
+        public Integer case_id_integer;
+        public String case_id_string;
+
+        public get() {
+        }
+
+        public get(Integer case_id_integer) {
+            this.case_id_integer = case_id_integer;
+        }
+        public get(String case_id_string) {
+            this.case_id_string = case_id_string;
+        }
     }
 
     public static class get_bug_systems extends TestCase.get {
