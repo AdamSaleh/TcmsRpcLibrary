@@ -9,6 +9,12 @@ package com.redhat.nitrate;
  * @author asaleh
  */
 public class TestCase {
+
+    public static final int PROPOSED=1;
+    public static final int CONFIRMED=2;
+    public static final int DISABLED=3;
+    public static final int NEED_UPDATE=4;
+    
         public Integer case_id;
         public Object create_date;
         public Integer product;
@@ -135,6 +141,12 @@ public class TestCase {
         Integer case_id;
         Integer object_pks;
     }
+
+    public static class filter extends TcmsHashCommand {
+
+        public String summary__icontain;
+    }
+
 
     public static class get extends TcmsArrayCommand {
 

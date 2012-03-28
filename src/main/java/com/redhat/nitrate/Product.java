@@ -10,6 +10,17 @@ package com.redhat.nitrate;
  */
 public class Product {
 
+    public Integer id;
+    public String name;
+    public String classification;
+    public String description;
+    public String milestone_url;
+    public Boolean disallow_new;
+    public Integer vote_super_user;
+    public Integer max_vote_super_bug;
+    public Integer votes_to_confirm;
+    public String default_milestone;
+
     public static class check_category extends TcmsArrayCommand {
 
         @RequiredField
