@@ -22,6 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import redstone.xmlrpc.XmlRpcClient;
 import redstone.xmlrpc.XmlRpcFault;
+import redstone.xmlrpc.XmlRpcStruct;
 
 /**
  *
@@ -31,7 +32,6 @@ public class TcmsConnection {
 
     private XmlRpcClient client;
     private String session;
-
 
     /*public static boolean testConnection(){
     return true;
@@ -93,7 +93,20 @@ public class TcmsConnection {
                 field.set(object, data.get(name));
             }
         }
-        return data;
+        return object;
+    }
+    public static Object rpcStructToFields(XmlRpcStruct data, Class c) throws IllegalAccessException, InstantiationException {
+        Object object = c.newInstance();
+
+        Field[] fields = c.getFields();
+        for (Field field : fields) {
+            String name = getName(field);
+            if (data.containsKey(name)) {
+                Object value = data.get(name);
+                field.set(object, value); //object.field=value;
+            }
+        }
+        return object;
     }
 
     static Hashtable<String, Object> fieldsToHashtable(Object object) throws IllegalAccessException {
