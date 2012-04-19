@@ -7,6 +7,8 @@ package com.redhat.nitrate;
 
 import java.util.Collections;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import redstone.xmlrpc.XmlRpcFault;
 
 /**
@@ -24,5 +26,12 @@ public abstract class TcmsCommand {
             return c.invoke(this);
      }
     
-
+     public String description(){
+        try {
+            return TcmsConnection.commandToString(this);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(TcmsCommand.class.getName()).log(Level.SEVERE, null, ex);
+            return TcmsCommand.class.getName() + ":" + ex.getMessage();
+        }
+     }
 }

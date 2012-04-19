@@ -21,8 +21,10 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import redstone.xmlrpc.XmlRpcClient;
+import redstone.xmlrpc.XmlRpcException;
 import redstone.xmlrpc.XmlRpcFault;
 import redstone.xmlrpc.XmlRpcStruct;
+import sun.misc.BASE64Encoder;
 
 /**
  *
@@ -32,55 +34,80 @@ public class TcmsConnection {
 
     private XmlRpcClient client;
     private String session;
+    private URL url;
+    private String username=null;
+    private String password="";
 
-    /*public static boolean testConnection(){
-    return true;
-    }*/
-    public static boolean testTcmsConnection(URL url) throws IOException {
+    /*
+     * public static boolean testConnection(){ return true;
+    }
+     */
+    public boolean testTcmsConnection() throws IOException {
         HttpURLConnection connection = null;
         BufferedReader rd = null;
         StringBuilder sb = null;
         String line = null;
-        boolean result=false;
+        boolean result = false;
 
         //Set up the initial connection
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setDoOutput(true);
-            connection.setReadTimeout(10000);
-            connection.connect();
-            //read the result from the server
-            rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            sb = new StringBuilder();
-            while ((line = rd.readLine()) != null) {
-                sb.append(line + '\n');
-            }
-            if(sb.lastIndexOf("XML-RPC Service")>0){
-                result = true;
-            }
-            //close the connection, set all objects to null
-            connection.disconnect();
+        connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setDoOutput(true);
+        connection.setReadTimeout(10000);
+        
+        ///Set basic auth
+        if(username!=null){
+           connection.setRequestProperty("Authorization", basicAuthString(username, password) );
+        }
+        
+        connection.connect();
+        //read the result from the server
+        rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        sb = new StringBuilder();
+        while ((line = rd.readLine()) != null) {
+            sb.append(line + '\n');
+        }
+        if (sb.lastIndexOf("XML-RPC Service") > 0) {
+            result = true;
+        }
+        //close the connection, set all objects to null
+        connection.disconnect();
 
-    
-            rd = null;
-            sb = null;
-            connection = null;
-            return result;
+
+        rd = null;
+        sb = null;
+        connection = null;
+        return result;
 
 
     }
 
     public TcmsConnection(String server_url) throws MalformedURLException {
-        client = new XmlRpcClient(server_url, false);
+        this(new URL(server_url));
     }
 
     public TcmsConnection(URL server_url) {
         client = new XmlRpcClient(server_url, false);
+        url = server_url;
+
     }
 
     public void setSession(String session) {
         client.setRequestProperty("Cookie", "sessionid=".concat(session));
         this.session = session;
+    }
+
+    private String basicAuthString(String username, String password){
+        BASE64Encoder enc = new sun.misc.BASE64Encoder();
+        String userpassword = username + ":" + password;
+        String encodedAuthorization = enc.encode(userpassword.getBytes());
+        return "Basic "+ encodedAuthorization;
+    }
+    
+    public void setUsernameAndPassword(String username, String password) {
+        this.username=username;
+        this.password=password;
+        client.setRequestProperty("Authorization", basicAuthString(username, password) );
     }
 
     public static Object hashtableToFields(Hashtable<String, Object> data, Class c) throws IllegalAccessException, InstantiationException {
@@ -95,6 +122,7 @@ public class TcmsConnection {
         }
         return object;
     }
+
     public static Object rpcStructToFields(XmlRpcStruct data, Class c) throws IllegalAccessException, InstantiationException {
         Object object = c.newInstance();
 
@@ -121,6 +149,22 @@ public class TcmsConnection {
             }
         }
         return data;
+    }
+
+    static String commandToString(TcmsCommand aThis) throws IllegalAccessException {
+        String out = aThis.name();
+        Collection c = (Collection) commandToParams(aThis);
+        for (Object o : c) {
+            if (o instanceof Hashtable) {
+                Hashtable<String, Object> ht = (Hashtable<String, Object>) o;
+                for (String key : ht.keySet()) {
+                    out = out + "," + key + ":" + o.toString();
+                }
+            } else {
+                out = out + "," + o.toString();
+            }
+        }
+        return out;
     }
 
     static String getName(Field field) {
@@ -171,6 +215,9 @@ public class TcmsConnection {
             List params = commandToParams(cmd);
             Object o = client.invoke(cmd.name(), params);
             return o;
+        }catch (XmlRpcException ex) {
+            Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         } catch (IllegalAccessException ex) {
             Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
             return null;
