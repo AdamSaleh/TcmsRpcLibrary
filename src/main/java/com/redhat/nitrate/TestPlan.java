@@ -5,16 +5,38 @@
 
 package com.redhat.nitrate;
 
+import redstone.xmlrpc.XmlRpcArray;
+
 /**
  *
  * @author asaleh
  */
 public class TestPlan {
+    public Integer product_id;
+    public Boolean is_active;
+    public XmlRpcArray tag;
+    public String parent; 
+    public XmlRpcArray attachment;
+    public String type;
+    public String default_product_version;
+    public Integer type_id;
     public Integer plan_id;
-<<<<<<< HEAD
-=======
+    public String product;
+    public XmlRpcArray env_group;
+    public String author;
+    public String create_date;
+    public XmlRpcArray component;
+    public String name;
+    public Integer owner_id;
+    public String owner;
+    public Integer author_id;
+    public String extra_link;
+    /* FIXME: !!!
+    public XmlRpcArray case;
+    */
+    public String parent_id;
     
->>>>>>> a5a5d1d99933b8ab8f242a7840f0a6a53b730db0
+    
     public static class add_tag extends TcmsArrayCommand{
         @RequiredField
         public Integer[] plan_ids;
