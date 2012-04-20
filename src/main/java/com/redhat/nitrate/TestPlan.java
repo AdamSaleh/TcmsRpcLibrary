@@ -11,6 +11,10 @@ package com.redhat.nitrate;
  */
 public class TestPlan {
     public Integer plan_id;
+<<<<<<< HEAD
+=======
+    
+>>>>>>> a5a5d1d99933b8ab8f242a7840f0a6a53b730db0
     public static class add_tag extends TcmsArrayCommand{
         @RequiredField
         public Integer[] plan_ids;

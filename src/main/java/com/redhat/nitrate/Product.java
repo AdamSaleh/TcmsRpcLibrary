@@ -74,6 +74,19 @@ public class Product {
     }
     
     public static class Version{
+        public Integer id;
+        public String value;
+        public String product;
+        public Integer product_id;
+
+    }
     
+    public static class Category{
+        public Integer id;
+        public String name;
+        public String product;
+        public String description;
+        public Integer product_id;
+
     }
 }
