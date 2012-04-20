@@ -35,8 +35,7 @@ public class TestPlan {
     public XmlRpcArray case;
     */
     public String parent_id;
-    
-    
+   
     public static class add_tag extends TcmsArrayCommand{
         @RequiredField
         public Integer[] plan_ids;
