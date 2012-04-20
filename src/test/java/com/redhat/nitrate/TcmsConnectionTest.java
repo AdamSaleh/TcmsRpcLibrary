@@ -15,6 +15,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import redstone.xmlrpc.XmlRpcFault;
+import redstone.xmlrpc.XmlRpcStruct;
 
 /**
  *
@@ -62,6 +63,133 @@ public class TcmsConnectionTest {
         } catch (XmlRpcFault ex) {
             Logger.getLogger(TcmsConnectionTest.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    /**
+     * Test of testTcmsConnection method, of class TcmsConnection.
+     */
+    @Test
+    public void testTestTcmsConnection() throws Exception {
+    }
+
+    /**
+     * Test of setSession method, of class TcmsConnection.
+     */
+    @Test
+    public void testSetSession() {
+    }
+
+    /**
+     * Test of setUsernameAndPassword method, of class TcmsConnection.
+     */
+    @Test
+    public void testSetUsernameAndPassword() {
+    }
+
+    /**
+     * Test of hashtableToFields method, of class TcmsConnection.
+     */
+    @Test
+    public void testHashtableToFields() throws Exception {
+    }
+
+    /**
+     * Test of rpcStructToFields method, of class TcmsConnection.
+     */
+    @Test
+    public void testRpcStructToFields() throws MalformedURLException  {
+        try{
+            TcmsConnection connection = new TcmsConnection("https://tcms.engineering.redhat.com/xmlrpc/");
+            connection.setUsernameAndPassword(PrivatePassword.name, PrivatePassword.password);
+            Auth.login_krbv login = new Auth.login_krbv();
+            String session = login.invoke(connection);
+            assertTrue(session.length() > 0);
+            connection.setSession(session);
+        
+            // test getting TestPlan
+            testRpcStructToFieldsTestPlan(connection);
+        
+            // test getting Build
+            testRpcStructToFieldsBuild(connection);
+            
+            connection.invoke(new Auth.logout());
+        } catch (XmlRpcFault ex) {
+            Logger.getLogger(TcmsConnectionTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+                Logger.getLogger(TcmsConnectionTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(TcmsConnectionTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void testRpcStructToFieldsTestPlan(TcmsConnection connection) 
+            throws  XmlRpcFault, IllegalAccessException, InstantiationException{
+        
+        TestPlan planResult;
+        TestPlan.get get = new TestPlan.get();
+        // Get plan JenkinsPluginTest
+        get.id = 5866;
+        Object o = connection.invoke(get);
+        if (o instanceof XmlRpcStruct) {
+            planResult = (TestPlan) TcmsConnection.rpcStructToFields((XmlRpcStruct) o, TestPlan.class);
+        }
+        
+    }
+    
+    private void testRpcStructToFieldsBuild(TcmsConnection connection) throws IllegalAccessException, InstantiationException, XmlRpcFault{
+       
+        Build buildResult;
+        Build.check_build get = new Build.check_build();
+        // FIXME: implement productid
+        get.name = "TCMS-3.0.3-1.svn2841";
+        get.productid = 243;
+        Object o = connection.invoke(get);
+        if (o instanceof XmlRpcStruct) {
+            buildResult = (Build) TcmsConnection.rpcStructToFields((XmlRpcStruct) o, Build.class);
+        }
+                     
+    }
+
+    /**
+     * Test of fieldsToHashtable method, of class TcmsConnection.
+     */
+    @Test
+    public void testFieldsToHashtable() throws Exception {
+    }
+
+    /**
+     * Test of commandToString method, of class TcmsConnection.
+     */
+    @Test
+    public void testCommandToString() throws Exception {
+    }
+
+    /**
+     * Test of getName method, of class TcmsConnection.
+     */
+    @Test
+    public void testGetName() {
+    }
+
+    /**
+     * Test of fieldsToCollection method, of class TcmsConnection.
+     */
+    @Test
+    public void testFieldsToCollection() throws Exception {
+    }
+
+    /**
+     * Test of commandToParams method, of class TcmsConnection.
+     */
+    @Test
+    public void testCommandToParams() throws Exception {
+    }
+
+    /**
+     * Test of invoke method, of class TcmsConnection.
+     */
+    @Test
+    public void testInvoke() throws Exception {
     }
 
 }

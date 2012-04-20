@@ -10,7 +10,16 @@ package com.redhat.nitrate;
  * @author asaleh
  */
 public class Build {
-     public static class check_build extends TcmsArrayCommand{
+    
+    public String milestone;
+    public String product;
+    public Integer product_id;
+    public Boolean is_active;
+    public String description;
+    public String name;
+    public Integer build_id;
+    
+    public static class check_build extends TcmsArrayCommand{
         @RequiredField
         public String name;
         @RequiredField
