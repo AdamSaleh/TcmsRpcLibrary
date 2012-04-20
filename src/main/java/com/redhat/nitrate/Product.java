@@ -10,17 +10,18 @@ package com.redhat.nitrate;
  */
 public class Product {
 
-    public Integer id;
-    public String name;
-    public Integer category;
-    public String classification;
-    public String description;
-    public String milestone_url;
+    public Integer id;  
+    public Integer classification_id;
     public Boolean disallow_new;
-    public Integer vote_super_user;
     public Integer max_vote_super_bug;
-    //public Integer votes_to_confirm;
     public String default_milestone;
+    public String description;
+    public String name;
+    public String classification;  
+    public Boolean votes_to_confirm;    
+    public String milestone_url;
+    public Integer vote_super_user;
+    //public Integer votes_to_confirm;
 
     public static class check_category extends TcmsArrayCommand {
 
