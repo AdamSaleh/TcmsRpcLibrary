@@ -79,4 +79,13 @@ public class Product {
         public Integer product_id;
 
     }
+    
+    public static class Category{
+        public Integer id;
+        public String name;
+        public String product;
+        public String description;
+        public Integer product_id;
+
+    }
 }
