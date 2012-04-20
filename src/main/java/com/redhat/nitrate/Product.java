@@ -71,4 +71,8 @@ public class Product {
     }
     public static class get_versions extends Product.get {
     }
+    
+    public static class Version{
+    
+    }
 }
