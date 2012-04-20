@@ -73,6 +73,10 @@ public class Product {
     }
     
     public static class Version{
-    
+        public Integer id;
+        public String value;
+        public String product;
+        public Integer product_id;
+
     }
 }

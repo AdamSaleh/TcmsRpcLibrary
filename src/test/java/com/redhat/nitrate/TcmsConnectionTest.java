@@ -55,6 +55,9 @@ public class TcmsConnectionTest {
             String session = login.invoke(connection);
             assertTrue(session.length() > 0);
             connection.setSession(session);
+            
+            
+            
             connection.invoke(new Auth.logout());
         } catch (XmlRpcFault ex) {
             Logger.getLogger(TcmsConnectionTest.class.getName()).log(Level.SEVERE, null, ex);
