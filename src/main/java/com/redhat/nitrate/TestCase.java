@@ -242,4 +242,11 @@ public class TestCase {
          public Integer id;
          public create values=new create();
     }
+    
+    public static class Priority  {
+         public Integer id;
+         public Boolean is_active;
+         public Integer sortkey;
+         public String value;
+    }
 }
