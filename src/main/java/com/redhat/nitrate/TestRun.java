@@ -4,11 +4,40 @@
  */
 package com.redhat.nitrate;
 
+import redstone.xmlrpc.XmlRpcArray;
+
 /**
  *
  * @author asaleh
  */
 public class TestRun {
+    
+    // OK
+    public String summary;
+    public String case_run_status;
+    public XmlRpcArray env_value;
+    public String product_version;
+    public String manager;
+    public String default_tester;
+    public XmlRpcArray tag;
+    public Integer manager_id;
+    public String stop_date;
+    public Integer plan_text_version;
+    public String build;
+    public String errata_id;
+    public Integer plan_id;
+    public String plan;
+    public Integer run_id;
+    public String estimated_time;
+    public Integer default_tester_id;
+    public Integer build_id;
+    public Integer environment_id;
+    public String notes;
+    public String start_date;
+    public XmlRpcArray cc;
+    
+    
+    
 
     public static class add_cases extends TcmsArrayCommand {
 

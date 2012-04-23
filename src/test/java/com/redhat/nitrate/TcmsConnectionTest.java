@@ -112,6 +112,12 @@ public class TcmsConnectionTest {
             // test getting Build
             testRpcStructToFieldsBuild(connection);
             
+            // test getting Product
+            testRpcStructToFieldsProduct(connection);
+            
+            // test getting TestRun
+            testRpcStructToFieldsTestRun(connection);
+            
             connection.invoke(new Auth.logout());
         } catch (XmlRpcFault ex) {
             Logger.getLogger(TcmsConnectionTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -140,15 +146,38 @@ public class TcmsConnectionTest {
        
         Build buildResult;
         Build.check_build get = new Build.check_build();
-        // FIXME: implement productid
         get.name = "TCMS-3.0.3-1.svn2841";
         get.productid = 243;
         Object o = connection.invoke(get);
         if (o instanceof XmlRpcStruct) {
             buildResult = TcmsConnection.rpcStructToFields((XmlRpcStruct) o, Build.class);
-        }
-                     
+        }                     
     }
+    
+    private void testRpcStructToFieldsProduct(TcmsConnection connection) throws IllegalAccessException, InstantiationException, XmlRpcFault{
+        
+        Product p;
+        Product.get get = new Product.get();
+        get.id = 243;
+        Object o = connection.invoke(get);
+        if (o instanceof XmlRpcStruct) {
+            p = TcmsConnection.rpcStructToFields((XmlRpcStruct) o, Product.class);
+        }                     
+    }
+    
+    private void testRpcStructToFieldsTestRun(TcmsConnection connection) throws IllegalAccessException, InstantiationException, XmlRpcFault{
+        
+        TestRun t;
+        TestRun.get get = new TestRun.get();
+        get.run_id = 36898;
+        Object o = connection.invoke(get);
+        if (o instanceof XmlRpcStruct) {
+            t = TcmsConnection.rpcStructToFields((XmlRpcStruct) o, TestRun.class);
+            int a = 12;
+        }                     
+    }
+    
+    
 
     /**
      * Test of fieldsToHashtable method, of class TcmsConnection.
