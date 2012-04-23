@@ -131,7 +131,7 @@ public class TcmsConnectionTest {
         get.id = 5866;
         Object o = connection.invoke(get);
         if (o instanceof XmlRpcStruct) {
-            planResult = (TestPlan) TcmsConnection.rpcStructToFields((XmlRpcStruct) o, TestPlan.class);
+            planResult = TcmsConnection.rpcStructToFields((XmlRpcStruct) o, TestPlan.class);
         }
         
     }
@@ -145,7 +145,7 @@ public class TcmsConnectionTest {
         get.productid = 243;
         Object o = connection.invoke(get);
         if (o instanceof XmlRpcStruct) {
-            buildResult = (Build) TcmsConnection.rpcStructToFields((XmlRpcStruct) o, Build.class);
+            buildResult = TcmsConnection.rpcStructToFields((XmlRpcStruct) o, Build.class);
         }
                      
     }

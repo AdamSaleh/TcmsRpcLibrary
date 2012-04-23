@@ -110,7 +110,7 @@ public class TcmsConnection {
         client.setRequestProperty("Authorization", basicAuthString(username, password) );
     }
 
-    public static Object hashtableToFields(Hashtable<String, Object> data, Class c) throws IllegalAccessException, InstantiationException {
+    public static <T extends Object> T hashtableToFields(Hashtable<String, Object> data, Class<T> c) throws IllegalAccessException, InstantiationException {
         Object object = c.newInstance();
 
         Field[] fields = c.getFields();
@@ -120,10 +120,10 @@ public class TcmsConnection {
                 field.set(object, data.get(name));
             }
         }
-        return object;
+        return (T) object;
     }
 
-    public static Object rpcStructToFields(XmlRpcStruct data, Class c) throws IllegalAccessException, InstantiationException {
+    public static <T extends Object> T rpcStructToFields(XmlRpcStruct data, Class<T> c) throws IllegalAccessException, InstantiationException {
         Object object = c.newInstance();
 
         Field[] fields = c.getFields();
@@ -134,7 +134,7 @@ public class TcmsConnection {
                 field.set(object, value); //object.field=value;
             }
         }
-        return object;
+        return (T) object;
     }
 
     static Hashtable<String, Object> fieldsToHashtable(Object object) throws IllegalAccessException {
