@@ -10,6 +10,7 @@ package com.redhat.nitrate;
  */
 public class Product {
 
+    // OK
     public Integer id;  
     public Integer classification_id;
     public Boolean disallow_new;

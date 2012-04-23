@@ -12,6 +12,8 @@ import redstone.xmlrpc.XmlRpcArray;
  * @author asaleh
  */
 public class TestPlan {
+    
+    // OK except for case
     public Integer product_id;
     public Boolean is_active;
     public XmlRpcArray tag;
