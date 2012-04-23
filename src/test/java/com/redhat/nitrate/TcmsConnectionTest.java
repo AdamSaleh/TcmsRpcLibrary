@@ -22,6 +22,11 @@ import redstone.xmlrpc.XmlRpcStruct;
  * @author asaleh
  */
 public class TcmsConnectionTest {
+    private Integer testRunId = 36898;
+    private Integer testCaseId = 154226;
+    private Integer testPlanId = 5866;
+    private Integer buildId = 772;
+    private Integer productId = 243;
 
     public TcmsConnectionTest() {
     }
@@ -118,6 +123,9 @@ public class TcmsConnectionTest {
             // test getting TestRun
             testRpcStructToFieldsTestRun(connection);
             
+            // test getting TestCase
+            testRpcStructToFieldsTestCase(connection);
+            
             connection.invoke(new Auth.logout());
         } catch (XmlRpcFault ex) {
             Logger.getLogger(TcmsConnectionTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -133,8 +141,7 @@ public class TcmsConnectionTest {
         
         TestPlan planResult;
         TestPlan.get get = new TestPlan.get();
-        // Get plan JenkinsPluginTest
-        get.id = 5866;
+        get.id = testPlanId;
         Object o = connection.invoke(get);
         if (o instanceof XmlRpcStruct) {
             planResult = TcmsConnection.rpcStructToFields((XmlRpcStruct) o, TestPlan.class);
@@ -145,9 +152,8 @@ public class TcmsConnectionTest {
     private void testRpcStructToFieldsBuild(TcmsConnection connection) throws IllegalAccessException, InstantiationException, XmlRpcFault{
        
         Build buildResult;
-        Build.check_build get = new Build.check_build();
-        get.name = "TCMS-3.0.3-1.svn2841";
-        get.productid = 243;
+        Build.get get = new Build.get();
+        get.id = buildId;
         Object o = connection.invoke(get);
         if (o instanceof XmlRpcStruct) {
             buildResult = TcmsConnection.rpcStructToFields((XmlRpcStruct) o, Build.class);
@@ -158,7 +164,7 @@ public class TcmsConnectionTest {
         
         Product p;
         Product.get get = new Product.get();
-        get.id = 243;
+        get.id = productId;
         Object o = connection.invoke(get);
         if (o instanceof XmlRpcStruct) {
             p = TcmsConnection.rpcStructToFields((XmlRpcStruct) o, Product.class);
@@ -169,10 +175,21 @@ public class TcmsConnectionTest {
         
         TestRun t;
         TestRun.get get = new TestRun.get();
-        get.run_id = 36898;
+        get.run_id = testRunId;
         Object o = connection.invoke(get);
         if (o instanceof XmlRpcStruct) {
             t = TcmsConnection.rpcStructToFields((XmlRpcStruct) o, TestRun.class);
+        }                     
+    }
+    
+    private void testRpcStructToFieldsTestCase(TcmsConnection connection) throws IllegalAccessException, InstantiationException, XmlRpcFault{
+        
+        TestCase t;
+        TestCase.get get = new TestCase.get();
+        get.case_id_integer = testCaseId;
+        Object o = connection.invoke(get);
+        if (o instanceof XmlRpcStruct) {
+            t = TcmsConnection.rpcStructToFields((XmlRpcStruct) o, TestCase.class);
             int a = 12;
         }                     
     }

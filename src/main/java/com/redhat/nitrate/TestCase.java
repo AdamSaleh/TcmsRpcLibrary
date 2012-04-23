@@ -4,6 +4,9 @@
  */
 package com.redhat.nitrate;
 
+import redstone.xmlrpc.XmlRpcArray;
+import redstone.xmlrpc.XmlRpcStruct;
+
 /**
  *
  * @author asaleh
@@ -15,30 +18,35 @@ public class TestCase {
     public static final int DISABLED=3;
     public static final int NEED_UPDATE=4;
     
-        public Integer case_id;
-        public Object create_date;
-        public Integer product;
-        public Integer category;
-        public Integer priority;
-        public String summary;
-        public Integer case_status;
-        public Integer plan;
-        public Integer component;
-        public String default_tester;
-        public String estimated_time;
-        public Integer is_automated;
-        public Boolean is_automated_proposed;
-        public Integer sortkey;
-        public String script;
-        public String arguments;
-        public String requirement;
-        public String alias;
-        public String action;
-        public String effect;
-        public String setup;
-        public String breakdown;
-        public Object tag;
-        public Object bug;
+    // OK
+    public String summary;
+    public Integer priority_id;
+    public XmlRpcArray tag;
+    public String default_tester;
+    public Integer case_status_id;
+    public String author;
+    public String create_date;
+    public XmlRpcArray component;
+    public String priority;
+    public Integer author_id;
+    public Boolean is_automated_proposed;
+    public String reviewer;
+    public String requirement;
+    public XmlRpcStruct text;
+    public String alias;
+    public Integer category_id;
+    public Integer is_automated;
+    public XmlRpcArray attachment;
+    public String script;
+    public String category;
+    public String arguments;
+    public String estimated_time;
+    public XmlRpcArray plan;
+    public String default_tester_id;    // <-- weird type
+    public Integer case_id;         
+    public String case_status;
+    public String reviewer_id;          // <-- weird type
+    public String notes;
     
 
     public static class add_comment extends TcmsArrayCommand {
