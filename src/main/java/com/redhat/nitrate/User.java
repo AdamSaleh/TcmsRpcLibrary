@@ -4,18 +4,36 @@
  */
 package com.redhat.nitrate;
 
+import redstone.xmlrpc.XmlRpcArray;
+
 /**
  *
  * @author asaleh
  */
 public class User {
+         public Integer id;
+         public XmlRpcArray user_permissions;
+         public XmlRpcArray groups;
+         public String first_name;
+         public String username;
+         public String last_name;
+         public String email;
+         public String date_joined;
+         public Boolean is_staff;
+         public Boolean is_active;
+         public Boolean is_superuser;
+         public String last_login;
+         
 
     public static class get extends TcmsArrayCommand {
 
         @RequiredField
-        public Integer run_id;
+        public Integer id;
     }
 
+    public static class filter extends TcmsHashCommand {
+        public String username__startswith;
+    }
     public static class get_me extends TcmsArrayCommand {
     }
 
