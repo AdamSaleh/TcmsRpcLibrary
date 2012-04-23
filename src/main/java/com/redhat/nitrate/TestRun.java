@@ -55,6 +55,15 @@ public class TestRun {
         public String[] tags;
     }
 
+    public static class filter extends TcmsHashCommand {
+
+        public Integer build;
+        public Integer plan;
+        public Integer product;
+        public Integer manager;
+
+    }
+    
     public static class create extends TcmsHashCommand {
 
         @RequiredField
