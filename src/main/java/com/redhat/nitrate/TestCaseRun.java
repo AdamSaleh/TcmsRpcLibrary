@@ -18,6 +18,30 @@ public class TestCaseRun {
     public static final int BLOCKED=6;
     public static final int ERROR=7;
     public static final int WAIVED=8;
+    
+    public Integer case_run_status_id;
+    public String case_run_status;
+    public String running_date;
+    public Integer case_run_id;
+    public String tested_by_id;
+    public Integer case_text_version;
+    public String assignee;
+    public String close_date;
+    public String build;
+    public String run;
+    public String tested_by;
+    public Integer run_id;
+    public Integer assignee_id;
+    public String cortkey;
+    public Integer case_id;
+    public Integer build_id;    
+    /* FIXME: !!!
+    public String case;
+    */
+    public Integer environment_id;
+    public Boolean is_current;
+    public String notes;
+    
 
     public static class add_comment extends TcmsArrayCommand {
 

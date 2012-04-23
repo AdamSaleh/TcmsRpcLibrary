@@ -27,6 +27,7 @@ public class TcmsConnectionTest {
     private Integer testPlanId = 5866;
     private Integer buildId = 772;
     private Integer productId = 243;
+    private Integer testCaseRunId = 1039185;
 
     public TcmsConnectionTest() {
     }
@@ -126,6 +127,9 @@ public class TcmsConnectionTest {
             // test getting TestCase
             testRpcStructToFieldsTestCase(connection);
             
+            // test getting TestCaseRun
+            testRpcStructToFieldsTestCaseRun(connection);
+            
             connection.invoke(new Auth.logout());
         } catch (XmlRpcFault ex) {
             Logger.getLogger(TcmsConnectionTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -190,6 +194,16 @@ public class TcmsConnectionTest {
         Object o = connection.invoke(get);
         if (o instanceof XmlRpcStruct) {
             t = TcmsConnection.rpcStructToFields((XmlRpcStruct) o, TestCase.class);
+        }                     
+    }
+    private void testRpcStructToFieldsTestCaseRun(TcmsConnection connection) throws IllegalAccessException, InstantiationException, XmlRpcFault{
+        
+        TestCaseRun t;
+        TestCaseRun.get get = new TestCaseRun.get();
+        get.case_run_id = testCaseRunId;
+        Object o = connection.invoke(get);
+        if (o instanceof XmlRpcStruct) {
+            t = TcmsConnection.rpcStructToFields((XmlRpcStruct) o, TestCaseRun.class);
             int a = 12;
         }                     
     }
