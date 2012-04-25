@@ -158,7 +158,7 @@ public class TcmsConnection {
             if (o instanceof Hashtable) {
                 Hashtable<String, Object> ht = (Hashtable<String, Object>) o;
                 for (String key : ht.keySet()) {
-                    out = out + "," + key + ":" + o.toString();
+                    out = out + "," + key + ":" + ht.get(key).toString();
                 }
             } else {
                 out = out + "," + o.toString();
