@@ -110,21 +110,37 @@ public class TcmsConnection {
         client.setRequestProperty("Authorization", basicAuthString(username, password) );
     }
 
-    public static <T extends Object> T hashtableToFields(Hashtable<String, Object> data, Class<T> c) throws IllegalAccessException, InstantiationException {
-        Object object = c.newInstance();
+    public static <T extends Object> T hashtableToFields(Hashtable<String, Object> data, Class<T> c){
+        try {
+            Object object = c.newInstance();
 
-        Field[] fields = c.getFields();
-        for (Field field : fields) {
-            String name = getName(field);
-            if (data.containsKey(name)) {
-                field.set(object, data.get(name));
+            Field[] fields = c.getFields();
+            for (Field field : fields) {
+                String name = getName(field);
+                if (data.containsKey(name)) {
+                    try {
+                        field.set(object, data.get(name));
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
             }
+            return (T) object;
+        } catch (InstantiationException ex) {
+            Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return (T) object;
+        return null;
     }
 
-    public static <T extends Object> T rpcStructToFields(XmlRpcStruct data, Class<T> c) throws IllegalAccessException, InstantiationException {
-        Object object = c.newInstance();
+    public static <T extends Object> T rpcStructToFields(XmlRpcStruct data, Class<T> c)  {
+        Object object = null;
+        try {
+            object = c.newInstance();
+        
 
         Field[] fields = c.getFields();
         for (Field field : fields) {
@@ -134,16 +150,28 @@ public class TcmsConnection {
                 field.set(object, value); //object.field=value;
             }
         }
+        } catch (InstantiationException ex) {
+            Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return (T) object;
     }
 
-    static Hashtable<String, Object> fieldsToHashtable(Object object) throws IllegalAccessException {
+    static Hashtable<String, Object> fieldsToHashtable(Object object) {
         Hashtable<String, Object> data = new Hashtable<String, Object>();
 
         Field[] fields = object.getClass().getFields();
         for (Field field : fields) {
             String name = getName(field);
-            Object value = field.get(object);
+            Object value=null;
+            try {
+                value = field.get(object);
+            } catch (IllegalArgumentException ex) {
+                Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
             if (value != null) {
                 data.put(name, value);
             }
@@ -175,13 +203,20 @@ public class TcmsConnection {
         return s;
     }
 
-    static List<Object> fieldsToCollection(Object object) throws IllegalAccessException {
+    static List<Object> fieldsToCollection(Object object) {
         ArrayList data = new ArrayList();
 
         Field[] fields = object.getClass().getFields();
         for (Field field : fields) {
             String name = getName(field);
-            Object value = field.get(object);
+            Object value=null;
+            try {
+                value = field.get(object);
+            } catch (IllegalArgumentException ex) {
+                Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             if (TcmsArrayCommand.class.isInstance(value)) {
                 value = fieldsToCollection(value);
@@ -196,7 +231,7 @@ public class TcmsConnection {
         return data;
     }
 
-    public static List commandToParams(TcmsCommand cmd) throws IllegalAccessException {
+    public static List commandToParams(TcmsCommand cmd) {
         Field[] fields = cmd.getClass().getFields();
 
         if (TcmsArrayCommand.class.isInstance(cmd)) {
@@ -218,9 +253,6 @@ public class TcmsConnection {
         }catch (XmlRpcException ex) {
             Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
             return null;
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
+        } 
     }
 }
