@@ -35,12 +35,11 @@ public class TcmsConnection {
     private XmlRpcClient client;
     private String session;
     private URL url;
-    private String username=null;
-    private String password="";
+    private String username = null;
+    private String password = "";
 
     /*
-     * public static boolean testConnection(){ return true;
-    }
+     * public static boolean testConnection(){ return true; }
      */
     public boolean testTcmsConnection() throws IOException {
         HttpURLConnection connection = null;
@@ -54,12 +53,12 @@ public class TcmsConnection {
         connection.setRequestMethod("GET");
         connection.setDoOutput(true);
         connection.setReadTimeout(10000);
-        
+
         ///Set basic auth
-        if(username!=null){
-           connection.setRequestProperty("Authorization", basicAuthString(username, password) );
+        if (username != null) {
+            connection.setRequestProperty("Authorization", basicAuthString(username, password));
         }
-        
+
         connection.connect();
         //read the result from the server
         rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -97,59 +96,42 @@ public class TcmsConnection {
         this.session = session;
     }
 
-    private String basicAuthString(String username, String password){
+    private String basicAuthString(String username, String password) {
         BASE64Encoder enc = new sun.misc.BASE64Encoder();
         String userpassword = username + ":" + password;
         String encodedAuthorization = enc.encode(userpassword.getBytes());
-        return "Basic "+ encodedAuthorization;
-    }
-    
-    public void setUsernameAndPassword(String username, String password) {
-        this.username=username;
-        this.password=password;
-        client.setRequestProperty("Authorization", basicAuthString(username, password) );
+        return "Basic " + encodedAuthorization;
     }
 
-    public static <T extends Object> T hashtableToFields(Hashtable<String, Object> data, Class<T> c){
+    public void setUsernameAndPassword(String username, String password) {
+        this.username = username;
+        this.password = password;
+        client.setRequestProperty("Authorization", basicAuthString(username, password));
+    }
+
+    public static <T extends Object> T rpcStructToFields(XmlRpcStruct data, Class<T> c) {
+        Object object = null;
         try {
-            Object object = c.newInstance();
+            object = c.newInstance();
+
 
             Field[] fields = c.getFields();
             for (Field field : fields) {
                 String name = getName(field);
                 if (data.containsKey(name)) {
-                    try {
-                        field.set(object, data.get(name));
-                    } catch (IllegalArgumentException ex) {
-                        Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IllegalAccessException ex) {
-                        Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
+                    Object value = data.get(name);
+                    // fix string/integer abiguity
+                    if((value instanceof String) && (field.getType() == Integer.class)){
+                        String s = (String) value;
+                        if(s.trim().length() == 0){
+                            value = null;
+                        }else{
+                            value = Integer.getInteger((String)value);
+                        }
                     }
+                    field.set(object, value); //object.field=value;
                 }
             }
-            return (T) object;
-        } catch (InstantiationException ex) {
-            Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
-    public static <T extends Object> T rpcStructToFields(XmlRpcStruct data, Class<T> c)  {
-        Object object = null;
-        try {
-            object = c.newInstance();
-        
-
-        Field[] fields = c.getFields();
-        for (Field field : fields) {
-            String name = getName(field);
-            if (data.containsKey(name)) {
-                Object value = data.get(name);
-                field.set(object, value); //object.field=value;
-            }
-        }
         } catch (InstantiationException ex) {
             Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
@@ -158,13 +140,13 @@ public class TcmsConnection {
         return (T) object;
     }
 
-    static Hashtable<String, Object> fieldsToHashtable(Object object) {
+    public static Hashtable<String, Object> fieldsToHashtable(Object object) {
         Hashtable<String, Object> data = new Hashtable<String, Object>();
 
         Field[] fields = object.getClass().getFields();
         for (Field field : fields) {
             String name = getName(field);
-            Object value=null;
+            Object value = null;
             try {
                 value = field.get(object);
             } catch (IllegalArgumentException ex) {
@@ -209,7 +191,7 @@ public class TcmsConnection {
         Field[] fields = object.getClass().getFields();
         for (Field field : fields) {
             String name = getName(field);
-            Object value=null;
+            Object value = null;
             try {
                 value = field.get(object);
             } catch (IllegalArgumentException ex) {
@@ -250,9 +232,9 @@ public class TcmsConnection {
             List params = commandToParams(cmd);
             Object o = client.invoke(cmd.name(), params);
             return o;
-        }catch (XmlRpcException ex) {
+        } catch (XmlRpcException ex) {
             Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
             return null;
-        } 
+        }
     }
 }

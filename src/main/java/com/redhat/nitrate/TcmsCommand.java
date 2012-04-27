@@ -6,6 +6,8 @@
 package com.redhat.nitrate;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,4 +36,19 @@ public abstract class TcmsCommand {
             return TcmsCommand.class.getName() + ":" + ex.getMessage();
         }
      }
+    @Override
+    public boolean equals(Object obj) {
+        int hashcode =  TcmsConnection.fieldsToHashtable(obj).hashCode();
+        return hashcode == hashCode();
+    }
+
+    @Override
+    public int hashCode() {
+       /* Hashtable<String,Object> t = TcmsConnection.fieldsToHashtable(this);
+        int sum=0;
+        for(String s:t.keySet()){
+            sum+=t.get(s).hashCode();
+        }*/
+        return TcmsConnection.fieldsToHashtable(this).hashCode();
+    }
 }
