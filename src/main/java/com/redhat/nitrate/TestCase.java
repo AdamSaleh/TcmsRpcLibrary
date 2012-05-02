@@ -153,6 +153,14 @@ public class TestCase {
     public static class filter extends TcmsHashCommand {
 
         public String summary__icontain;
+      
+        public Integer product;
+        public Integer category;
+        public Integer priority;
+        public String summary;
+        public Integer plan;
+        
+        
     }
 
 

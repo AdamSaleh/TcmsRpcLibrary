@@ -61,6 +61,7 @@ public class TestRun {
         public Integer plan;
         public Integer product;
         public Integer manager;
+        public String  summary;
 
     }
     
