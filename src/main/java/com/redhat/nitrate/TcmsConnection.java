@@ -162,7 +162,7 @@ public class TcmsConnection {
     }
 
     static String commandToString(TcmsCommand aThis) throws IllegalAccessException {
-        String out = aThis.name();
+        String out = "";
         Collection c = (Collection) commandToParams(aThis);
         for (Object o : c) {
             if (o instanceof Hashtable) {

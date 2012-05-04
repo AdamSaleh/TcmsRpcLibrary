@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.redhat.nitrate;
 
 import java.util.Collections;
@@ -18,37 +17,50 @@ import redstone.xmlrpc.XmlRpcFault;
  * @author asaleh
  */
 public abstract class TcmsCommand {
-     public String name(){
-            String s[] = this.getClass().getCanonicalName().split("\\.");
-            int l = s.length;
-            String name = s[l-2]+"."+s[l-1];
-            return name;
-     };
-     public Object invoke(TcmsConnection c) throws XmlRpcFault{
-            return c.invoke(this);
-     }
-    
-     public String description(){
+
+    public String name() {
+        String s[] = this.getClass().getCanonicalName().split("\\.");
+        int l = s.length;
+        String name = s[l - 2] + "." + s[l - 1];
+        return name;
+    }
+
+    ;
+     public Object invoke(TcmsConnection c) throws XmlRpcFault {
+        return c.invoke(this);
+    }
+
+    public String description() {
         try {
             return TcmsConnection.commandToString(this);
         } catch (IllegalAccessException ex) {
             Logger.getLogger(TcmsCommand.class.getName()).log(Level.SEVERE, null, ex);
-            return TcmsCommand.class.getName() + ":" + ex.getMessage();
+            return ex.getMessage();
         }
-     }
+    }
+
+    public Hashtable<String, String> descriptionMap() {
+        Hashtable<String, String> out = new Hashtable<String, String>();
+        Hashtable<String, Object> map = TcmsConnection.fieldsToHashtable(this);
+        for (String k : map.keySet()) {
+            out.put(k, map.get(k).toString());
+        }
+        return out;
+    }
+
     @Override
     public boolean equals(Object obj) {
-        int hashcode =  TcmsConnection.fieldsToHashtable(obj).hashCode();
+        int hashcode = TcmsConnection.fieldsToHashtable(obj).hashCode();
         return hashcode == hashCode();
     }
 
     @Override
     public int hashCode() {
-       /* Hashtable<String,Object> t = TcmsConnection.fieldsToHashtable(this);
-        int sum=0;
-        for(String s:t.keySet()){
-            sum+=t.get(s).hashCode();
-        }*/
+        /*
+         * Hashtable<String,Object> t = TcmsConnection.fieldsToHashtable(this);
+         * int sum=0; for(String s:t.keySet()){ sum+=t.get(s).hashCode();
+        }
+         */
         return TcmsConnection.fieldsToHashtable(this).hashCode();
     }
 }
