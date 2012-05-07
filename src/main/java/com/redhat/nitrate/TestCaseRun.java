@@ -88,6 +88,17 @@ public class TestCaseRun {
         Integer object_pks;
     }
 
+    public static class filter extends TcmsHashCommand {
+
+        public Integer build;
+        public Integer run;
+        public Integer caseVar;
+        public Integer category;
+        public Integer case_run_status;
+        
+        
+    }
+    
     public static class get extends TcmsArrayCommand {
 
         @RequiredField
