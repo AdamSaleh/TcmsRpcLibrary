@@ -10,14 +10,8 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import redstone.xmlrpc.XmlRpcClient;
@@ -32,11 +26,10 @@ import sun.misc.BASE64Encoder;
  */
 public class TcmsConnection {
 
-    private XmlRpcClient client;
+    private transient XmlRpcClient client;
     private String session;
     private URL url;
-    private String username = null;
-    private String password = "";
+    private TcmsAccessCredentials credentials;
 
     /*
      * public static boolean testConnection(){ return true; }
@@ -55,8 +48,10 @@ public class TcmsConnection {
         connection.setReadTimeout(10000);
 
         ///Set basic auth
-        if (username != null) {
-            connection.setRequestProperty("Authorization", basicAuthString(username, password));
+        if (!credentials.isEmpty()) {
+            // FIXME !!!
+            String debug = basicAuthString(credentials.getUsername(), credentials.getPassword());
+            connection.setRequestProperty("Authorization", basicAuthString(credentials.getUsername(), credentials.getPassword()));
         }
 
         connection.connect();
@@ -88,6 +83,7 @@ public class TcmsConnection {
     public TcmsConnection(URL server_url) {
         client = new XmlRpcClient(server_url, false);
         url = server_url;
+        credentials = new TcmsAccessCredentials();
 
     }
 
@@ -104,8 +100,8 @@ public class TcmsConnection {
     }
 
     public void setUsernameAndPassword(String username, String password) {
-        this.username = username;
-        this.password = password;
+        credentials.setUsername(username);
+        credentials.setPassword(password);
         client.setRequestProperty("Authorization", basicAuthString(username, password));
     }
 

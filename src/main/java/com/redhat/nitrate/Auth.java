@@ -4,7 +4,6 @@
  */
 package com.redhat.nitrate;
 
-import javax.xml.ws.RequestWrapper;
 import redstone.xmlrpc.XmlRpcFault;
 
 /**
@@ -15,6 +14,7 @@ public class Auth {
 
     public static class login extends TcmsHashCommand {
 
+        // FIXME: substitute with TcmsAccessCredentials ???
         @RequiredField
         public String username;
         @RequiredField

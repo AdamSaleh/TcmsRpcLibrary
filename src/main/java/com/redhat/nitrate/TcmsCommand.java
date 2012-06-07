@@ -4,10 +4,7 @@
  */
 package com.redhat.nitrate;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import redstone.xmlrpc.XmlRpcFault;
