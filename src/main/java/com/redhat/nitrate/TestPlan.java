@@ -33,9 +33,7 @@ public class TestPlan {
     public String owner;
     public Integer author_id;
     public String extra_link;
-    /* FIXME: !!!
-    public XmlRpcArray case;
-    */
+    public XmlRpcArray caseVar;
     public String parent_id;
    
     public static class add_tag extends TcmsArrayCommand{

@@ -31,47 +31,49 @@ public class TcmsConnection {
     private URL url;
     private TcmsAccessCredentials credentials;
 
-    /*
-     * public static boolean testConnection(){ return true; }
-     */
-    public boolean testTcmsConnection() throws IOException {
-        HttpURLConnection connection = null;
-        BufferedReader rd = null;
-        StringBuilder sb = null;
-        String line = null;
-        boolean result = false;
+    public boolean testTcmsConnection() {
+        try {
+            HttpURLConnection connection = null;
+            BufferedReader rd = null;
+            StringBuilder sb = null;
+            String line = null;
+            boolean result = false;
 
-        //Set up the initial connection
-        connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        connection.setDoOutput(true);
-        connection.setReadTimeout(10000);
+            //Set up the initial connection
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setDoOutput(true);
+            connection.setReadTimeout(100000);
 
-        ///Set basic auth
-        if (!credentials.isEmpty()) {
-            // FIXME !!!
-            String debug = basicAuthString(credentials.getUsername(), credentials.getPassword());
-            connection.setRequestProperty("Authorization", basicAuthString(credentials.getUsername(), credentials.getPassword()));
+            ///Set basic auth
+            if (!credentials.isEmpty()) {
+                // FIXME !!!
+                String debug = basicAuthString(credentials.getUsername(), credentials.getPassword());
+                connection.setRequestProperty("Authorization", basicAuthString(credentials.getUsername(), credentials.getPassword()));
+            }
+
+            connection.connect();
+            //read the result from the server
+            rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            sb = new StringBuilder();
+            while ((line = rd.readLine()) != null) {
+                sb.append(line + '\n');
+            }
+            if (sb.lastIndexOf("XML-RPC Service") > 0) {
+                result = true;
+            }
+            //close the connection, set all objects to null
+            connection.disconnect();
+
+
+            rd = null;
+            sb = null;
+            connection = null;
+            return result;
+        } catch (IOException ex) {
+            Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
-
-        connection.connect();
-        //read the result from the server
-        rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        sb = new StringBuilder();
-        while ((line = rd.readLine()) != null) {
-            sb.append(line + '\n');
-        }
-        if (sb.lastIndexOf("XML-RPC Service") > 0) {
-            result = true;
-        }
-        //close the connection, set all objects to null
-        connection.disconnect();
-
-
-        rd = null;
-        sb = null;
-        connection = null;
-        return result;
 
 
     }

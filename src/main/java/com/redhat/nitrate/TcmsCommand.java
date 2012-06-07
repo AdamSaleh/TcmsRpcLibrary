@@ -53,11 +53,6 @@ public abstract class TcmsCommand {
 
     @Override
     public int hashCode() {
-        /*
-         * Hashtable<String,Object> t = TcmsConnection.fieldsToHashtable(this);
-         * int sum=0; for(String s:t.keySet()){ sum+=t.get(s).hashCode();
-        }
-         */
         return TcmsConnection.fieldsToHashtable(this).hashCode();
     }
 }
