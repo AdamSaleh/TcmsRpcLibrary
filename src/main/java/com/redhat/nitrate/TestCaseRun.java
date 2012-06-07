@@ -35,9 +35,7 @@ public class TestCaseRun {
     public String cortkey;
     public Integer case_id;
     public Integer build_id;    
-    /* FIXME: !!!
-    public String case;
-    */
+    public String caseVar;
     public Integer environment_id;
     public Boolean is_current;
     public String notes;
