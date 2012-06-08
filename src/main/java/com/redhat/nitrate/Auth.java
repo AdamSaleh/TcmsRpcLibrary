@@ -14,7 +14,6 @@ public class Auth {
 
     public static class login extends TcmsHashCommand {
 
-        // FIXME: substitute with TcmsAccessCredentials ???
         @RequiredField
         public String username;
         @RequiredField

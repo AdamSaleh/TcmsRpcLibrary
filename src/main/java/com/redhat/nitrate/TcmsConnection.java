@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
@@ -31,8 +32,7 @@ public class TcmsConnection {
     private URL url;
     private TcmsAccessCredentials credentials;
 
-    public boolean testTcmsConnection() {
-        try {
+    public boolean testTcmsConnection() throws IOException {
             HttpURLConnection connection = null;
             BufferedReader rd = null;
             StringBuilder sb = null;
@@ -47,7 +47,6 @@ public class TcmsConnection {
 
             ///Set basic auth
             if (!credentials.isEmpty()) {
-                // FIXME !!!
                 String debug = basicAuthString(credentials.getUsername(), credentials.getPassword());
                 connection.setRequestProperty("Authorization", basicAuthString(credentials.getUsername(), credentials.getPassword()));
             }
@@ -70,12 +69,7 @@ public class TcmsConnection {
             sb = null;
             connection = null;
             return result;
-        } catch (IOException ex) {
-            Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
-
-
+        
     }
 
     public TcmsConnection(String server_url) throws MalformedURLException {
