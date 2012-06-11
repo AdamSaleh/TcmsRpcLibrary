@@ -4,6 +4,7 @@
  */
 package com.redhat.nitrate;
 
+import redstone.xmlrpc.XmlRpcException;
 import redstone.xmlrpc.XmlRpcFault;
 
 /**
@@ -34,7 +35,7 @@ public class Auth {
 
     public static class login_krbv extends TcmsArrayCommand {
 
-        public String invoke(TcmsConnection c) throws XmlRpcFault {
+        public String invoke(TcmsConnection c) throws XmlRpcFault, XmlRpcException {
             return (String) c.invoke(this);
         }
     }

@@ -43,7 +43,7 @@ public class TcmsConnection {
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setDoOutput(true);
-            connection.setReadTimeout(100000);
+            connection.setReadTimeout(10000);
 
             ///Set basic auth
             if (!credentials.isEmpty()) {
@@ -221,14 +221,14 @@ public class TcmsConnection {
         return null;
     }
 
-    public Object invoke(TcmsCommand cmd) throws XmlRpcFault {
+    public Object invoke(TcmsCommand cmd) throws XmlRpcException, XmlRpcFault {
         try {
             List params = commandToParams(cmd);
             Object o = client.invoke(cmd.name(), params);
             return o;
         } catch (XmlRpcException ex) {
             Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            throw ex;
         }
     }
 }
