@@ -47,11 +47,13 @@ public class TcmsConnection {
 
             ///Set basic auth
             if (!credentials.isEmpty()) {
-                String debug = basicAuthString(credentials.getUsername(), credentials.getPassword());
                 connection.setRequestProperty("Authorization", basicAuthString(credentials.getUsername(), credentials.getPassword()));
             }
 
             connection.connect();
+            
+            if(connection.getResponseCode() == 401) throw new IOException("Server returned HTTP 401 Unauthorized. Please check username and password.");
+            
             //read the result from the server
             rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             sb = new StringBuilder();
