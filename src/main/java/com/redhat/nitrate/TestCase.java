@@ -159,7 +159,8 @@ public class TestCase {
         public Integer priority;
         public String summary;
         public Integer plan;
-        
+            public String arguments;
+
         
     }
 
