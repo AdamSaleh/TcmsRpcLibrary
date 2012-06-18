@@ -2,8 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.redhat.nitrate;
+package com.redhat.nitrate.command;
 
+import com.redhat.nitrate.RequiredField;
+import com.redhat.nitrate.TcmsArrayCommand;
+import com.redhat.nitrate.TcmsHashCommand;
 import redstone.xmlrpc.XmlRpcArray;
 import redstone.xmlrpc.XmlRpcStruct;
 
@@ -83,11 +86,11 @@ public class TestCase {
 
     public static class attach_bug extends TcmsHashCommand {
 
-        Integer case_id;
-        Integer bug_id;
-        Integer bug_system_id;
-        String summary;
-        String description;
+        public Integer case_id;
+        public Integer bug_id;
+        public Integer bug_system_id;
+        public String summary;
+        public String description;
     }
 
     public static class calculate_average_estimated_time extends TcmsArrayCommand {
@@ -146,8 +149,8 @@ public class TestCase {
 
     public static class detach_bug extends TcmsArrayCommand {
 
-        Integer case_id;
-        Integer object_pks;
+        public Integer case_id;
+        public Integer object_pks;
     }
 
     public static class filter extends TcmsHashCommand {
@@ -212,7 +215,7 @@ public class TestCase {
     public static class get_text extends TcmsArrayCommand {
         @RequiredField
         public Integer case_id;
-        Integer version;
+        public Integer version;
     }
 
     public static class link_plan extends TcmsArrayCommand {

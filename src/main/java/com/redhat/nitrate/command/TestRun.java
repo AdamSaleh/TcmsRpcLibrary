@@ -2,8 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.redhat.nitrate;
+package com.redhat.nitrate.command;
 
+import com.redhat.nitrate.RequiredField;
+import com.redhat.nitrate.TcmsArrayCommand;
+import com.redhat.nitrate.TcmsHashCommand;
 import redstone.xmlrpc.XmlRpcArray;
 
 /**
@@ -158,17 +161,17 @@ public class TestRun {
 
         public static class Values extends TcmsHashCommand {
 
-            Integer plan;
-            Integer product;
-            Integer build;
-            Integer manager;
-            Integer default_tester;
-            String summary;
-            Object estimated_time;
-            Integer product_version;
-            Integer plan_text_version;
-            String notes;
-            Integer status;
+            public Integer plan;
+            public Integer product;
+            public Integer build;
+            public Integer manager;
+            public Integer default_tester;
+            public String summary;
+            public Object estimated_time;
+            public Integer product_version;
+            public Integer plan_text_version;
+            public String notes;
+            public Integer status;
         }
     }
 }

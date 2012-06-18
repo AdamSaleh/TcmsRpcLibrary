@@ -5,6 +5,7 @@
 
 package com.redhat.nitrate;
 
+import com.redhat.nitrate.command.Auth;
 import java.util.Hashtable;
 import java.util.List;
 import org.junit.AfterClass;

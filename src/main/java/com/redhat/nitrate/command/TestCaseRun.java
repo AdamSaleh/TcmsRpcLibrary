@@ -2,7 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.redhat.nitrate;
+package com.redhat.nitrate.command;
+
+import com.redhat.nitrate.RequiredField;
+import com.redhat.nitrate.TcmsArrayCommand;
+import com.redhat.nitrate.TcmsHashCommand;
 
 /**
  *
@@ -51,11 +55,11 @@ public class TestCaseRun {
 
     public static class attach_bug extends TcmsHashCommand {
 
-        Integer case_run_id;
-        Integer bug_id;
-        Integer bug_system_id;
-        String summary;
-        String description;
+        public Integer case_run_id;
+        public Integer bug_id;
+        public Integer bug_system_id;
+        public String summary;
+        public String description;
     }
 
     public static class check_case_run_status extends TcmsArrayCommand {
@@ -82,8 +86,8 @@ public class TestCaseRun {
 
     public static class detach_bug extends TcmsArrayCommand {
 
-        Integer case_run_id;
-        Integer object_pks;
+        public Integer case_run_id;
+        public Integer object_pks;
     }
 
     public static class filter extends TcmsHashCommand {
@@ -120,11 +124,11 @@ public class TestCaseRun {
 
         public static class Values extends TcmsHashCommand {
 
-            Integer build;
-            String asignee;
-            Integer case_run_status;
-            String notes;
-            Integer sortkey;
+            public Integer build;
+            public String asignee;
+            public Integer case_run_status;
+            public String notes;
+            public Integer sortkey;
         }
     }
 }

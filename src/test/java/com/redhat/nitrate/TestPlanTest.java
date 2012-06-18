@@ -5,6 +5,7 @@
 
 package com.redhat.nitrate;
 
+import com.redhat.nitrate.command.TestPlan;
 import java.util.List;
 import java.util.Hashtable;
 import org.junit.AfterClass;

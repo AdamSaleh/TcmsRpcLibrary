@@ -4,6 +4,13 @@
  */
 package com.redhat.nitrate;
 
+import com.redhat.nitrate.command.TestCase;
+import com.redhat.nitrate.command.TestCaseRun;
+import com.redhat.nitrate.command.TestPlan;
+import com.redhat.nitrate.command.TestRun;
+import com.redhat.nitrate.command.Auth;
+import com.redhat.nitrate.command.Build;
+import com.redhat.nitrate.command.Product;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;

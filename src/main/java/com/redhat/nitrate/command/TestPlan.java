@@ -3,8 +3,11 @@
  * and open the template in the editor.
  */
 
-package com.redhat.nitrate;
+package com.redhat.nitrate.command;
 
+import com.redhat.nitrate.RequiredField;
+import com.redhat.nitrate.TcmsArrayCommand;
+import com.redhat.nitrate.TcmsHashCommand;
 import redstone.xmlrpc.XmlRpcArray;
 
 /**
@@ -96,13 +99,13 @@ public class TestPlan {
          public Integer id;
          public update.Values values=new Values();
          public static class Values extends TcmsHashCommand{
-             String name;
-             Integer type;
-             Integer product;
-             Integer default_product_version;
-             Integer parent;
-             Boolean is_active;
-             Integer env_group;
+             public String name;
+             public Integer type;
+             public Integer product;
+             public Integer default_product_version;
+             public Integer parent;
+             public Boolean is_active;
+             public Integer env_group;
          }
     }
 }
