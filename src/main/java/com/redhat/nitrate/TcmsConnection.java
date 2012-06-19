@@ -227,15 +227,24 @@ public class TcmsConnection {
         return null;
     }
 
-    // FIXME: javadoc
+    /**
+     * Invokes given command.
+     *
+     * As a side effect, also does some exception handling: instead of default
+     * XmlRpcFault messages, more useful messages are provided and are thrown as
+     * TcmsException. This simplifies exception handling across other classes.
+     * Author: jrusnack
+     *
+     * @param cmd
+     * @return
+     * @throws TcmsException
+     */
     public Object invoke(TcmsCommand cmd) throws TcmsException {
         try {
             List params = commandToParams(cmd);
             Object o = client.invoke(cmd.name(), params);
             return o;
-        } catch (XmlRpcFault ex) {
-            Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
-            throw new TcmsException(ex.getMessage());
+            
         } catch (XmlRpcException ex) {
             Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
 
@@ -254,6 +263,9 @@ public class TcmsConnection {
                 throw new TcmsException("Cannot connect to server. Check URL or try reloading this page");
             }
             throw ex;
+        } catch (XmlRpcFault ex){
+            Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
+            throw new TcmsException(ex.getMessage());
         }
     }
 

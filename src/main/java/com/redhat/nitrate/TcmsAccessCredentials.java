@@ -13,8 +13,10 @@ public class TcmsAccessCredentials {
     
     private transient String username;
     private transient String password;
+    private transient String serverURL;
 
-    public TcmsAccessCredentials(String username, String password) {
+    public TcmsAccessCredentials(String ServerURL, String username, String password) {
+        this.serverURL = ServerURL;
         this.username = username;
         this.password = password;
     }
