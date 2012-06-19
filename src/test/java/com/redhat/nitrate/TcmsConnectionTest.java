@@ -51,7 +51,7 @@ public class TcmsConnectionTest {
      * Test of Auth_login method, of class TcmsConnection.
      */
     @Test
-    public void testConnect() throws MalformedURLException, IOException {
+    public void testConnect() throws TcmsException, IOException {
              TcmsConnection connection = new TcmsConnection("https://tcms.engineering.redhat.com/xmlrpc");
               connection.setUsernameAndPassword(PrivatePassword.name, PrivatePassword.password);
               assertTrue(connection.testTcmsConnection());

@@ -34,7 +34,7 @@ public class TcmsConnection {
     private TcmsAccessCredentials credentials;
 
     // TODO: [refactor] maybe change from boolean to void and just throw exception
-    public boolean testTcmsConnection() throws IOException {
+    public boolean testTcmsConnection() throws IOException, TcmsException {
         HttpURLConnection connection = null;
         BufferedReader rd = null;
         StringBuilder sb = null;
@@ -58,7 +58,7 @@ public class TcmsConnection {
         connection.connect();
 
         if (connection.getResponseCode() == 401) {
-            throw new IOException("Server returned HTTP 401 Unauthorized. Please check username and password.");
+            throw new TcmsException("Server returned HTTP 401 Unauthorized. Please check username and password.");
         }
 
         //read the result from the server
@@ -269,9 +269,13 @@ public class TcmsConnection {
         }
     }
 
-    public static TcmsConnection connect(String serverUrl, TcmsAccessCredentials credentials) throws TcmsException, IOException {
+    public static TcmsConnection connect(String serverUrl, TcmsAccessCredentials credentials) throws TcmsException  {
         TcmsConnection connection = null;
-        connection = new TcmsConnection(serverUrl);
+        try{
+            connection = new TcmsConnection(serverUrl);
+        } catch (MalformedURLException ex){
+            throw new TcmsException("URL is malformed");
+        }
         connection.setUsernameAndPassword(credentials.getUsername(), credentials.getPassword());
 
         Auth.login_krbv auth = new Auth.login_krbv();
@@ -280,7 +284,7 @@ public class TcmsConnection {
         if (session != null && session.length() > 0) {
             connection.setSession(session);
         } else {
-            throw new IOException("Couln't connect to tcms server");
+            throw new TcmsException("Couln't connect to tcms server");
         }
         return connection;
     }
