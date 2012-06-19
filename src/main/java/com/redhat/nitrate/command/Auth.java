@@ -4,10 +4,7 @@
  */
 package com.redhat.nitrate.command;
 
-import com.redhat.nitrate.RequiredField;
-import com.redhat.nitrate.TcmsArrayCommand;
-import com.redhat.nitrate.TcmsConnection;
-import com.redhat.nitrate.TcmsHashCommand;
+import com.redhat.nitrate.*;
 import redstone.xmlrpc.XmlRpcException;
 import redstone.xmlrpc.XmlRpcFault;
 
@@ -32,14 +29,16 @@ public class Auth {
             this.password = password;
         }
 
-        public String invoke(TcmsConnection c) throws XmlRpcFault {
+        @Override
+        public String invoke(TcmsConnection c) throws TcmsException {
             return (String) c.invoke(this);
         }
     }
 
     public static class login_krbv extends TcmsArrayCommand {
 
-        public String invoke(TcmsConnection c) throws XmlRpcFault, XmlRpcException {
+        @Override
+        public String invoke(TcmsConnection c) throws TcmsException  {
             return (String) c.invoke(this);
         }
     }

@@ -4,6 +4,7 @@
  */
 package com.redhat.nitrate;
 
+import com.redhat.nitrate.command.Auth;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -32,46 +33,51 @@ public class TcmsConnection {
     private URL url;
     private TcmsAccessCredentials credentials;
 
+    // TODO: [refactor] maybe change from boolean to void and just throw exception
     public boolean testTcmsConnection() throws IOException {
-            HttpURLConnection connection = null;
-            BufferedReader rd = null;
-            StringBuilder sb = null;
-            String line = null;
-            boolean result = false;
+        HttpURLConnection connection = null;
+        BufferedReader rd = null;
+        StringBuilder sb = null;
+        String line = null;
+        boolean result = false;
 
-            //Set up the initial connection
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setDoOutput(true);
-            connection.setReadTimeout(10000);
+        //Set up the initial connection
+        connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setDoOutput(true);
+        /**
+         * FIXME: decide what timeout is most reasonable
+         */
+        connection.setReadTimeout(50000);
 
-            ///Set basic auth
-            if (!credentials.isEmpty()) {
-                connection.setRequestProperty("Authorization", basicAuthString(credentials.getUsername(), credentials.getPassword()));
-            }
+        ///Set basic auth
+        if (!credentials.isEmpty()) {
+            connection.setRequestProperty("Authorization", basicAuthString(credentials.getUsername(), credentials.getPassword()));
+        }
 
-            connection.connect();
-            
-            if(connection.getResponseCode() == 401) throw new IOException("Server returned HTTP 401 Unauthorized. Please check username and password.");
-            
-            //read the result from the server
-            rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            sb = new StringBuilder();
-            while ((line = rd.readLine()) != null) {
-                sb.append(line + '\n');
-            }
-            if (sb.lastIndexOf("XML-RPC Service") > 0) {
-                result = true;
-            }
-            //close the connection, set all objects to null
-            connection.disconnect();
+        connection.connect();
 
+        if (connection.getResponseCode() == 401) {
+            throw new IOException("Server returned HTTP 401 Unauthorized. Please check username and password.");
+        }
 
-            rd = null;
-            sb = null;
-            connection = null;
-            return result;
-        
+        //read the result from the server
+        rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        sb = new StringBuilder();
+        while ((line = rd.readLine()) != null) {
+            sb.append(line + '\n');
+        }
+        if (sb.lastIndexOf("XML-RPC Service") > 0) {
+            result = true;
+        }
+        //close the connection, set all objects to null
+        connection.disconnect();
+
+        rd = null;
+        sb = null;
+        connection = null;
+        return result;
+
     }
 
     public TcmsConnection(String server_url) throws MalformedURLException {
@@ -115,12 +121,12 @@ public class TcmsConnection {
                 if (data.containsKey(name)) {
                     Object value = data.get(name);
                     // fix string/integer abiguity
-                    if((value instanceof String) && (field.getType() == Integer.class)){
+                    if ((value instanceof String) && (field.getType() == Integer.class)) {
                         String s = (String) value;
-                        if(s.trim().length() == 0){
+                        if (s.trim().length() == 0) {
                             value = null;
-                        }else{
-                            value = Integer.getInteger((String)value);
+                        } else {
+                            value = Integer.getInteger((String) value);
                         }
                     }
                     field.set(object, value); //object.field=value;
@@ -221,14 +227,49 @@ public class TcmsConnection {
         return null;
     }
 
-    public Object invoke(TcmsCommand cmd) throws XmlRpcException, XmlRpcFault {
+    // FIXME: javadoc
+    public Object invoke(TcmsCommand cmd) throws TcmsException {
         try {
             List params = commandToParams(cmd);
             Object o = client.invoke(cmd.name(), params);
             return o;
+        } catch (XmlRpcFault ex) {
+            Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
+            throw new TcmsException(ex.getMessage());
         } catch (XmlRpcException ex) {
             Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
+
+            /*
+             * This exception usually means Unauthorized. Subsitute with more
+             * useful message
+             */
+            if (ex.getMessage().equals("The response could not be parsed.")) {
+                throw new TcmsException("Possibly wrong username/password");
+            }
+
+            /*
+             * Subsitute with more useful message
+             */
+            if (ex.getMessage().equals("A network error occurred.")) {
+                throw new TcmsException("Cannot connect to server. Check URL or try reloading this page");
+            }
             throw ex;
         }
+    }
+
+    public static TcmsConnection connect(String serverUrl, TcmsAccessCredentials credentials) throws TcmsException, IOException {
+        TcmsConnection connection = null;
+        connection = new TcmsConnection(serverUrl);
+        connection.setUsernameAndPassword(credentials.getUsername(), credentials.getPassword());
+
+        Auth.login_krbv auth = new Auth.login_krbv();
+        String session;
+        session = auth.invoke(connection);
+        if (session != null && session.length() > 0) {
+            connection.setSession(session);
+        } else {
+            throw new IOException("Couln't connect to tcms server");
+        }
+        return connection;
     }
 }

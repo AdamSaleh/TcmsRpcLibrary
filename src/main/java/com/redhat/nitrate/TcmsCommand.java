@@ -23,7 +23,7 @@ public abstract class TcmsCommand {
     }
 
     ;
-     public Object invoke(TcmsConnection c) throws XmlRpcFault {
+     public Object invoke(TcmsConnection c) throws TcmsException  {
         return c.invoke(this);
     }
 
