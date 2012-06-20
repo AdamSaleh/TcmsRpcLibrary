@@ -33,7 +33,6 @@ public class TcmsConnection {
     private URL url;
     private TcmsAccessCredentials credentials;
 
-    // TODO: [refactor] maybe change from boolean to void and just throw exception
     public boolean testTcmsConnection() throws IOException, TcmsException {
         HttpURLConnection connection = null;
         BufferedReader rd = null;
@@ -253,7 +252,7 @@ public class TcmsConnection {
              * useful message
              */
             if (ex.getMessage().equals("The response could not be parsed.")) {
-                throw new TcmsException("Possibly wrong username/password");
+                throw new TcmsException("Server returned error. Please check your username/password");
             }
 
             /*
