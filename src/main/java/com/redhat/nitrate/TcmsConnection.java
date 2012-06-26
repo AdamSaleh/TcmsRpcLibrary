@@ -33,7 +33,7 @@ public class TcmsConnection {
     private URL url;
     private TcmsAccessCredentials credentials;
 
-    public boolean testTcmsConnection() throws IOException, TcmsException {
+    public boolean testTcmsConnection() throws TcmsException, IOException {
         HttpURLConnection connection = null;
         BufferedReader rd = null;
         StringBuilder sb = null;
@@ -243,16 +243,23 @@ public class TcmsConnection {
             List params = commandToParams(cmd);
             Object o = client.invoke(cmd.name(), params);
             return o;
-            
+
         } catch (XmlRpcException ex) {
             Logger.getLogger(TcmsConnection.class.getName()).log(Level.SEVERE, null, ex);
 
-            /*
-             * This exception usually means Unauthorized. Subsitute with more
-             * useful message
-             */
+
             if (ex.getMessage().equals("The response could not be parsed.")) {
-                throw new TcmsException("Server returned error. Please check your username/password");
+                /*
+                 * This exception could mean anything, so try testing connection
+                 */
+                try {
+                    boolean res = testTcmsConnection();
+                    if (res) {
+                        throw new TcmsException(ex.getMessage());
+                    }
+                } catch (Exception e) {
+                    throw new TcmsException(e.getMessage());
+                }
             }
 
             /*
