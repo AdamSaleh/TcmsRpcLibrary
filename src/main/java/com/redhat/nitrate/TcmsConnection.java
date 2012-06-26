@@ -268,7 +268,7 @@ public class TcmsConnection {
         }
     }
 
-    public static TcmsConnection connect(String serverUrl, TcmsAccessCredentials credentials) throws TcmsException  {
+    public static TcmsConnection connect(String serverUrl, TcmsAccessCredentials credentials,boolean krbv) throws TcmsException  {
         TcmsConnection connection = null;
         try{
             connection = new TcmsConnection(serverUrl);
@@ -276,10 +276,15 @@ public class TcmsConnection {
             throw new TcmsException("URL is malformed");
         }
         connection.setUsernameAndPassword(credentials.getUsername(), credentials.getPassword());
-
-        Auth.login_krbv auth = new Auth.login_krbv();
-        String session;
-        session = auth.invoke(connection);
+        
+        String session=null;
+        if(krbv){
+            Auth.login_krbv auth = new Auth.login_krbv();
+            session = auth.invoke(connection);
+        }else{
+            Auth.login auth = new Auth.login(credentials.getUsername(), credentials.getPassword());
+            session = auth.invoke(connection);
+        }
         if (session != null && session.length() > 0) {
             connection.setSession(session);
         } else {
