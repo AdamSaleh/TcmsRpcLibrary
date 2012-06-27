@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.redhat.nitrate;
 
 import com.redhat.nitrate.command.Auth;
@@ -49,7 +46,8 @@ public class TcmsConnection {
          */
         connection.setReadTimeout(50000);
 
-        ///Set basic auth
+        ///Set basic auth 
+        // FIXME: possible kerberos 
         if (!credentials.isEmpty()) {
             connection.setRequestProperty("Authorization", basicAuthString(credentials.getUsername(), credentials.getPassword()));
         }

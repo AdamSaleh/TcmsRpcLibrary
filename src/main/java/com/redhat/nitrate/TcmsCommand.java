@@ -1,13 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.redhat.nitrate;
 
 import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import redstone.xmlrpc.XmlRpcFault;
 
 /**
  *
