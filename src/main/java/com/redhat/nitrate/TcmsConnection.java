@@ -8,7 +8,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
@@ -273,8 +272,31 @@ public class TcmsConnection {
         }
     }
 
-    public static TcmsConnection connect(String serverUrl, TcmsAccessCredentials credentials,boolean krbv) throws TcmsException  {
+    public static boolean checkHttps(String serverUrl) {
+        if (serverUrl.toLowerCase().contains("https")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Creates TcmsConnection.
+     * 
+     * @param serverUrl     
+     * @param credentials   
+     * @param krbv          When true, Kerberos authentication will be performed.
+     * @param enforceHttps  When true, checks for HTTPS and throws exception if fails
+     * @return
+     * @throws TcmsException 
+     */
+    public static TcmsConnection connect(String serverUrl, TcmsAccessCredentials credentials, boolean krbv, boolean enforceHttps) throws TcmsException  {
+        
         TcmsConnection connection = null;
+        if(enforceHttps && checkHttps(serverUrl) == false ) {
+            throw new TcmsException("Failed HTTPS check - verify server URL.");
+        }
+        
         try{
             connection = new TcmsConnection(serverUrl);
         } catch (MalformedURLException ex){
