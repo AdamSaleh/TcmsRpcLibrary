@@ -53,8 +53,9 @@ public class TcmsConnection {
 
         connection.connect();
 
-        if (connection.getResponseCode() == 401) {
-            throw new TcmsException("Server returned HTTP 401 Unauthorized. Please check username and password.");
+        int a = connection.getResponseCode();
+        if (connection.getResponseCode()/100 != 2) {
+            throw new TcmsException("Server returned HTTP " + connection.getResponseCode());
         }
 
         //read the result from the server
